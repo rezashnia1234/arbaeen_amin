@@ -26,18 +26,13 @@
 			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
 			document.addEventListener("deviceready", onDeviceReady, false);
 		}
-		if(window.localStorage.getItem('gender') == null)
-			window.localStorage.setItem('gender',"1");
 		if(window.localStorage.getItem('URL') == null)
-			window.localStorage.setItem('URL',"http://vadieh.net/registration/mobile-app/");
-		if(window.localStorage.getItem('URL_image') == null)
-			window.localStorage.setItem('URL_image',"http://vadieh.net/registration/");
+			window.localStorage.setItem('URL',"http://192.168.0.253/registration/mobile-app/");
 
 
 
 		function onDeviceReady() {
 			var networkState = navigator.connection.type;
-
 			//////////////////////////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +104,7 @@
 						"Cancelled: " + result.cancelled);
 					*/
 					//alert("Result: " + result.text);
-					get_user_data(result.text,"");
+					get_user_data(result.text);
 			  },
 			  function (error) {
 				  //alert("Scanning failed: " + error);
@@ -142,13 +137,21 @@
 				//alert("You selected button number " + results.buttonIndex + " and entered " + results.input1);
 				if(results.buttonIndex==1 && results.input1 != "")
 				{
-					get_user_data("",results.input1);
+					get_user_data(results.input1);
 				}
 			}
 		}
 
 
-		function get_user_data(id,KodeMeli) {
+		function disabled_menu() {
+				navigator.notification.alert(
+					'این گزینه در حال حاضر غیرفعال می باشد',  // message
+					alertDismissed,			// callback
+					'اخطار',				// title
+					'تائید'					// buttonName
+				);
+		}
+		function get_user_data(KodeMeli) {
 			//var networkState = navigator.connection.type;
 			if ( false && networkState == Connection.NONE) {
 				navigator.notification.alert(
@@ -166,22 +169,17 @@
 				}
 				$(".mypreload").css("display","block");
 				var URL = window.localStorage.getItem('URL') + "/check.php";
-				var URL_image = window.localStorage.getItem('URL_image');
 				$.ajax({
 						url: URL,
 						type: "GET",
 						data: {
 							app: "true",
 							act: "baresi",
-							id: id,
-							KodeMeli: KodeMeli,
-							gender: window.localStorage.getItem('gender')
+							KodeMeli: KodeMeli
 						},
 						async: true,
 						success : function(text)
 						{
-							text = text.replace('<img src="../','<img src="' + URL_image);
-							text = text.replace('<img src="../','<img src="' + URL_image);
 							$('html, body').animate({
 								scrollTop: 0
 							}, 0);
@@ -411,8 +409,8 @@ div#show_result {
 			<div class="besmelah" >بسم الله الرحمن الرحیم</div>
 			<div class="change_page" >
 				<a href="vorud.html" class="change_page_vorud "><span></span>ورود</a>
-				<a href="index.html" class="change_page_baresi selected"><span></span>بررسی</a>
-				<a href="khoruj.html" class="change_page_khoruj "><span></span>خروج</a>
+				<a href2="index.html" onclick="disabled_menu();" class="change_page_baresi selected"><span></span>بررسی</a>
+				<a href2="khoruj.html" onclick="disabled_menu();" class="change_page_khoruj "><span></span>خروج</a>
 			</div>
 			<div class="start_scan bottom_fix" onclick="StartScan();">اســکن جدیــد</div>
 			<a class="manual_data bottom_fix" href="#" onclick="keyboard();" ><img src="images/keyboard.svg" /></a>

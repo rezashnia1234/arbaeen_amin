@@ -31,6 +31,30 @@
 
 		function onDeviceReady() {
 			var networkState = navigator.connection.type;
+			//////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////
+			if ( device.platform == 'Android' ){
+				permissions.requestPermission(permissions.CAMERA, success, error);
+				function error() {
+					/* alert('1- Camera permission is not turned on'); */
+				}
+				function success( status ) {
+					/*
+					if( !status.hasPermission )
+					{
+						alert('2- Camera permission is not turned on');
+						alert("");
+					}
+					else
+						alert(status);
+					*/
+				}
+			}
+			//////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////
+			
 			//UserAgent.set("A786-110-A");
 			FastClick.attach(document.body);
 			if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
@@ -38,10 +62,7 @@
 			}
 			
 			if(window.localStorage.getItem('URL') == null)
-				window.localStorage.setItem('URL',"http://vadieh.net/registration/mobile-app/");
-			if(window.localStorage.getItem('URL_image') == null)
-				window.localStorage.setItem('URL_image',"http://vadieh.net/registration/");
-
+				window.localStorage.setItem('URL',"http://192.168.0.253/registration/mobile-app/");
 		}
 
 		$(window).load(function() {		
@@ -76,7 +97,7 @@
 		   cordova.plugins.barcodeScanner.scan(
 			  function (result) {
 					//alert("Result: " + result.text);
-					get_user_data(result.text,"");
+					get_user_data(result.text);
 			  },
 			  function (error) {
 				  //alert("Scanning failed: " + error);
@@ -109,12 +130,19 @@
 				//alert("You selected button number " + results.buttonIndex + " and entered " + results.input1);
 				if(results.buttonIndex==1 && results.input1 != "")
 				{
-					get_user_data("",results.input1);
+					get_user_data(results.input1);
 				}
 			}
 		}
-		
-		function get_user_data(id,KodeMeli) {
+		function disabled_menu() {
+				navigator.notification.alert(
+					'این گزینه در حال حاضر غیرفعال می باشد',  // message
+					alertDismissed,			// callback
+					'اخطار',				// title
+					'تائید'					// buttonName
+				);
+		}
+		function get_user_data(KodeMeli) {
 			//var networkState = navigator.connection.type;
 			if ( false && networkState == Connection.NONE) {
 				navigator.notification.alert(
@@ -132,16 +160,13 @@
 				}
 				$(".mypreload").css("display","block");
 				var URL = window.localStorage.getItem('URL') + "/in.php";
-				var URL_image = window.localStorage.getItem('URL_image');
 				$.ajax({
 						url: URL,
 						type: "GET",
 						data: {
 							app: "true",
 							act: "baresi",
-							id: id,
-							KodeMeli: KodeMeli,
-							gender: window.localStorage.getItem('gender')
+							KodeMeli: KodeMeli
 						},
 						async: true,
 						success : function(text)
@@ -357,8 +382,8 @@ div#show_result {
 			<div class="besmelah" >بسم الله الرحمن الرحیم</div>
 			<div class="change_page" >
 				<a href="vorud.html" class="change_page_vorud selected"><span></span>ورود</a>
-				<a href="index.html" class="change_page_baresi "><span></span>بررسی</a>
-				<a href="khoruj.html" class="change_page_khoruj "><span></span>خروج</a>
+				<a href2="index.html" onclick="disabled_menu();" class="change_page_baresi "><span></span>بررسی</a>
+				<a href2="khoruj.html" onclick="disabled_menu();" class="change_page_khoruj "><span></span>خروج</a>
 			</div>
 			<div class="start_scan bottom_fix" onclick="StartScan();">اســکن جدیــد</div>
 			<a class="manual_data bottom_fix" href="#" onclick="keyboard();" ><img src="images/keyboard.svg" /></a>

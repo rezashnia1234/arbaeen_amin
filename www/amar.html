@@ -25,6 +25,7 @@
 		function init() {		
 			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
 			document.addEventListener("deviceready", onDeviceReady, false);
+			get_user_data("","");
 		}
 
 
@@ -32,17 +33,13 @@
 		function onDeviceReady() {
 			var networkState = navigator.connection.type;
 			//UserAgent.set("A786-110-A");
-			get_user_data("","");
 			FastClick.attach(document.body);
 			if ( device.platform == 'Android' ){//Android,iOS,win7=WinCE,win8=Win32NT
 				document.addEventListener("backbutton", go_back_index, false);
 			}
 			
 			if(window.localStorage.getItem('URL') == null)
-				window.localStorage.setItem('URL',"http://vadieh.net/registration/mobile-app/");
-			if(window.localStorage.getItem('URL_image') == null)
-				window.localStorage.setItem('URL_image',"http://vadieh.net/registration/");
-
+				window.localStorage.setItem('URL',"http://192.168.0.253/registration/mobile-app/");
 		}
 
 		$(window).load(function() {		
@@ -52,7 +49,6 @@
 		});
 
 		function go_back_index() {
-			StartScan();
 			/*
 			navigator.notification.confirm(
 				'آیا تمایل به خروج از برنامه را دارید؟',	// message
@@ -72,32 +68,14 @@
 				
 			}
 		}
-		function StartScan() {
-			$(".mypreload").css("display","block");
-		   cordova.plugins.barcodeScanner.scan(
-			  function (result) {
-					//alert("Result: " + result.text);
-					get_user_data(result.text,"");
-			  },
-			  function (error) {
-				  //alert("Scanning failed: " + error);
-				  $(".mypreload").css("display","none");
-			  },
-			  {
-				  preferFrontCamera : false, // iOS and Android
-				  showFlipCameraButton : false, // iOS and Android
-				  showTorchButton : true, // iOS and Android
-				  torchOn: true, // Android, launch with the torch switched on (if available)
-				  prompt : "Place a barcode inside the scan area", // Android
-				  resultDisplayDuration: 0, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-				  //formats : "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED
-				  //orientation : "landscape", // Android only (portrait|landscape), default unset so it rotates with the device
-				  disableAnimations : true, // iOS
-				  disableSuccessBeep: false // iOS
-			  }
-		   );
+		function disabled_menu() {
+				navigator.notification.alert(
+					'این گزینه در حال حاضر غیرفعال می باشد',  // message
+					alertDismissed,			// callback
+					'اخطار',				// title
+					'تائید'					// buttonName
+				);
 		}
-		
 		function get_user_data(id,KodeMeli) {
 			//var networkState = navigator.connection.type;
 			if ( false && networkState == Connection.NONE) {
@@ -112,7 +90,6 @@
 			{
 				$(".mypreload").css("display","block");
 				var URL = window.localStorage.getItem('URL');
-				var URL_image = window.localStorage.getItem('URL_image');
 				$.ajax({
 						url: URL + "/static.php",
 						type: "GET",
@@ -123,13 +100,43 @@
 						async: true,
 						success : function(text)
 						{
-							text = text.replace('<img src="../','<img src="' + URL_image);
-							text = text.replace('<img src="../','<img src="' + URL_image);
 							$('html, body').animate({
 								scrollTop: 0
 							}, 0);
 							$('#show_result').html(text);
 							$(".mypreload").css("display","none");
+							
+							var percentColors = [
+								{ pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+								{ pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+								{ pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } } ];
+
+							var getColorForPercentage = function(pct) {
+								pct = 1- pct/100;
+								for (var i = 1; i < percentColors.length - 1; i++) {
+									if (pct < percentColors[i].pct) {
+										break;
+									}
+								}
+								var lower = percentColors[i - 1];
+								var upper = percentColors[i];
+								var range = upper.pct - lower.pct;
+								var rangePct = (pct - lower.pct) / range;
+								var pctLower = 1 - rangePct;
+								var pctUpper = rangePct;
+								var color = {
+									r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+									g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+									b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+								};
+								return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+								// or output as hex if preferred
+							}
+							$("ul.breadcrumb li.active").each(function(i, obj) {
+								//test
+								//console.log(getColorForPercentage($(this).attr("data-percent")));
+								$(this).css("background-color",getColorForPercentage($(this).attr("data-percent")));
+							});
 						},
 						error: function(jqXHR, exception) {
 							$(".mypreload").css("display","none");
@@ -318,14 +325,41 @@ a.change_page_vorud::after {
 }
 div#show_result {
     margin-top: 69px;
-    padding: 0 7px 67px 7px;
+    padding: 0 0px 67px 0px;
 }
 
 li {
     direction: rtl;
     text-align: right;
 }
-</style>	
+
+
+
+
+
+.breadcrumb > .active:before {
+	content: "";
+	padding: 0;
+}
+.breadcrumb > .active {
+	color: #000000;
+	width: auto;
+	background-color: gray;
+	text-align: center;
+	padding: 0 0px;
+	margin: 0 0 4px 0;
+	text-transform: uppercase;
+	border-radius: 4px;
+	border: 1px solid #080705;
+	box-sizing: border-box;
+	min-width: 74px;
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+#container{padding: 0;}
+</style>
 </head>
 <body onload="init();" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" id="body">
 	<div class="container " id="container" >
@@ -339,8 +373,8 @@ li {
 			<div class="besmelah" >بسم الله الرحمن الرحیم</div>
 			<div class="change_page" >
 				<a href="vorud.html" class="change_page_vorud "><span></span>ورود</a>
-				<a href="index.html" class="change_page_baresi "><span></span>بررسی</a>
-				<a href="khoruj.html" class="change_page_khoruj "><span></span>خروج</a>
+				<a href2="index.html" onclick="disabled_menu();" class="change_page_baresi "><span></span>بررسی</a>
+				<a href2="khoruj.html" onclick="disabled_menu();" class="change_page_khoruj "><span></span>خروج</a>
 			</div>
 			<div id="show_result">
 
