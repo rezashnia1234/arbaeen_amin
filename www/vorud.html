@@ -143,7 +143,7 @@
 				);
 		}
 		function get_user_data(KodeMeli) {
-			//var networkState = navigator.connection.type;
+alert(KodeMeli);
 			if ( false && networkState == Connection.NONE) {
 				navigator.notification.alert(
 					'شما برای مشاهده این صفحه نیاز به اینترنت دارید',  // message
@@ -154,12 +154,8 @@
 			}
 			else
 			{
-				navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-				if (navigator.vibrate) {
-					navigator.vibrate(100);
-				}
+alert("1");
 				$(".mypreload").css("display","block");
-				var URL = window.localStorage.getItem('URL') + "/in.php";
 				$.ajax({
 						url: URL,
 						type: "GET",
@@ -171,8 +167,7 @@
 						async: true,
 						success : function(text)
 						{
-							text = text.replace('<img src="../','<img src="' + URL_image);
-							text = text.replace('<img src="../','<img src="' + URL_image);
+alert("2");
 							$('html, body').animate({
 								scrollTop: 0
 							}, 0);
