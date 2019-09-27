@@ -143,7 +143,6 @@
 				);
 		}
 		function get_user_data(KodeMeli) {
-alert(KodeMeli);
 			if ( false && networkState == Connection.NONE) {
 				navigator.notification.alert(
 					'شما برای مشاهده این صفحه نیاز به اینترنت دارید',  // message
@@ -154,8 +153,8 @@ alert(KodeMeli);
 			}
 			else
 			{
-alert("1");
 				$(".mypreload").css("display","block");
+				var URL = window.localStorage.getItem('URL') + "/in.php";
 				$.ajax({
 						url: URL,
 						type: "GET",
@@ -167,7 +166,6 @@ alert("1");
 						async: true,
 						success : function(text)
 						{
-alert("2");
 							$('html, body').animate({
 								scrollTop: 0
 							}, 0);
