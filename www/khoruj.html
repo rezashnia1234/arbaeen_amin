@@ -22,6 +22,7 @@
     <script src="js/persian_number_to_english.js"></script>
     <script src="js/index.js"></script>
 	<script>
+		var torchOn_var = false;
 		function init() {		
 			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
 			document.addEventListener("deviceready", onDeviceReady, false);
@@ -29,6 +30,13 @@
 		}
 
 		function onDeviceReady() {
+			if(window.localStorage.getItem('displayOn') == "true")
+			{
+				setTimeout(function(){
+					window.brightness = cordova.require("cordova.plugin.Brightness.Brightness");
+					brightness.setKeepScreenOn(true);
+				}, 1000);
+			}
 			var networkState = navigator.connection.type;
 			//////////////////////////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +100,10 @@
 		}
 		function StartScan() {
 			$(".mypreload").css("display","block");
+			
+			if(window.localStorage.getItem('torchOn') == "true")
+				var torchOn_var = true;
+			
 		   cordova.plugins.barcodeScanner.scan(
 			  function (result) {
 					//alert("Result: " + result.text);
@@ -105,7 +117,7 @@
 				  preferFrontCamera : false, // iOS and Android
 				  showFlipCameraButton : false, // iOS and Android
 				  showTorchButton : true, // iOS and Android
-				  torchOn: false, // Android, launch with the torch switched on (if available)
+				  torchOn: torchOn_var, // Android, launch with the torch switched on (if available)
 				  prompt : "Place a barcode inside the scan area", // Android
 				  resultDisplayDuration: 0, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
 				  //formats : "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED

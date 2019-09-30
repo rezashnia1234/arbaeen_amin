@@ -51,6 +51,18 @@
 			
 			$("input[name=URL]").val(window.localStorage.getItem('URL'));
 		}
+		function torchOn() {
+			window.localStorage.setItem('torchOn',"true");
+		}
+		function torchOff() {
+			window.localStorage.setItem('torchOn',"false");
+		}
+		function displayOn() {
+			window.localStorage.setItem('displayOn',"true");
+		}
+		function displayOff() {
+			window.localStorage.setItem('displayOn',"false");
+		}
 		function onDeviceReady() {
 			var networkState = navigator.connection.type;
 			//UserAgent.set("A786-110-A");
@@ -271,6 +283,24 @@ li {
 				<br/>
 				<br/>
 				<button name="" onclick="save_local();" style="width:100%;padding:0 5px;">ذخیره لوکال</button>
+				<br/>
+				<br/>
+				<hr/>
+				<br/>
+				<button name="" onclick="torchOn();" style="width:100%;padding:0 5px;">چراغ دوربین روشن</button>
+				<br/>
+				<br/>
+				<button name="" onclick="torchOff();" style="width:100%;padding:0 5px;">چراغ دوربین خاموش</button>
+				<br/>
+				<br/>
+				<hr/>
+				<br/>
+				<button name="" onclick="displayOn();" style="width:100%;padding:0 5px;">صفحه نمایش روشن</button>
+				<br/>
+				<br/>
+				<button name="" onclick="displayOff();" style="width:100%;padding:0 5px;">صفحه نمایش خاموش</button>
+				<br/>
+				<br/>
 			</div>
 	</div>
 </body>
