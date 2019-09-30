@@ -26,6 +26,7 @@
 			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
 			document.addEventListener("deviceready", onDeviceReady, false);
 			window.location.href = "vorud.html";
+			$("input[name=kodemeli_input]").focus();
 		}
 		if(window.localStorage.getItem('URL') == null)
 			window.localStorage.setItem('URL',"http://192.168.0.253/registration/mobile-app/");
@@ -208,6 +209,23 @@
 				});
 			}
 		} 
+		
+		$( document ).ready(function() {
+			$("input[name=kodemeli_input]").keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+				if(keycode == '13'){
+					var val_temp = $(this).val();
+					if(val_temp=="")
+						return false;
+					if($.isNumeric(val_temp))
+					{
+						get_user_data(val_temp);
+					}
+					$(this).val("");
+					return false;
+				}
+			});
+		});
 	</script>	
 
 		
@@ -392,9 +410,16 @@ a.change_page_vorud::after {
 	z-index: -3;
 	background-color:#479c33;
 }
-div#show_result {
+div#show_result,div#show_result2 {
     margin-top: 69px;
     padding: 0 7px 67px 7px;
+}
+input.kodemeli_input{
+	width: 100%;
+	border: 0px;
+	padding: 10px;
+	border-radius: 4px;
+	color:#000000;
 }
 </style>	
 </head>
@@ -411,12 +436,19 @@ div#show_result {
 			<div class="change_page" >
 				<a href="vorud.html" class="change_page_vorud "><span></span>ورود</a>
 				<a href2="index.html" onclick="disabled_menu();" class="change_page_baresi selected"><span></span>بررسی</a>
-				<a href2="khoruj.html" onclick="disabled_menu();" class="change_page_khoruj "><span></span>خروج</a>
+				<a href="khoruj.html" class="change_page_khoruj "><span></span>خروج</a>
 			</div>
 			<div class="start_scan bottom_fix" onclick="StartScan();">اســکن جدیــد</div>
 			<a class="manual_data bottom_fix" href="#" onclick="keyboard();" ><img src="images/keyboard.svg" /></a>
 			<a class="setting bottom_fix" href="setting.html" ><img src="images/gear.svg" /></a>
-			<div id="show_result">
+			<div id="show_result2" style="padding-bottom:0;">
+				<div class="panel bg-info">
+					<div class="panel-body text-center">
+						<input name="kodemeli_input" class="kodemeli_input" type="text" value="" placeholder="کدملی" />
+					</div>
+				</div>
+			</div>
+			<div id="show_result" style="margin-top:0;">
 				<div class="panel bg-info">
 					<div class="panel-heading">
 						<h6 class="panel-title">منتظر اولین اسکن</h6>
