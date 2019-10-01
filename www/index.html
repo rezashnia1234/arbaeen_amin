@@ -244,8 +244,8 @@
 				$("input[name=kodemeli_input]").on('blur', function() {
 					setTimeout(function(){
 						$("input[name=kodemeli_input]").focus();
+						cordova.plugins.Keyboard.hide();
 						setTimeout(function(){
-							cordova.plugins.Keyboard.hide();
 						}, 50);
 					}, 100);
 				});
