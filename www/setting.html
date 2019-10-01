@@ -59,9 +59,13 @@
 		}
 		function displayOn() {
 			window.localStorage.setItem('displayOn',"true");
+			window.brightness = cordova.require("cordova.plugin.Brightness.Brightness");
+			brightness.setKeepScreenOn(true);
 		}
 		function displayOff() {
 			window.localStorage.setItem('displayOn',"false");
+			window.brightness = cordova.require("cordova.plugin.Brightness.Brightness");
+			brightness.setKeepScreenOn(false);
 		}
 		function onDeviceReady() {
 			var networkState = navigator.connection.type;

@@ -27,7 +27,6 @@
 			console.log('SMGROUP ::::::::::::::::::::::::::::::::::::    start init()');
 			document.addEventListener("deviceready", onDeviceReady, false);
 			window.location.href = "vorud.html";
-			$("input[name=kodemeli_input]").focus();
 		}
 		if(window.localStorage.getItem('URL') == null)
 			window.localStorage.setItem('URL',"http://192.168.0.253/registration/mobile-app/");
@@ -238,6 +237,12 @@
 					$(this).val("");
 					return false;
 				}
+			});
+			$("input[name=kodemeli_input]").focus();
+			$("input[name=kodemeli_input]").on('blur', function() {
+				setTimeout(function(){
+					$("input[name=kodemeli_input]").focus();
+				}, 100);
 			});
 		});
 	</script>	
