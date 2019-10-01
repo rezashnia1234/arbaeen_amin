@@ -231,11 +231,16 @@
 			});
 			
 			$("input[name=kodemeli_input]").focus();
-			$("input[name=kodemeli_input]").on('blur', function() {
-				setTimeout(function(){
-					$("input[name=kodemeli_input]").focus();
-				}, 100);
-			});
+			setTimeout(function(){
+				$("input[name=kodemeli_input]").on('blur', function() {
+					setTimeout(function(){
+						$("input[name=kodemeli_input]").focus();
+						setTimeout(function(){
+							cordova.plugins.Keyboard.hide();
+						}, 50);
+					}, 100);
+				});
+			}, 1000);
 		});
 	</script>	
 

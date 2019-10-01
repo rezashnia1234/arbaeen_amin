@@ -92,6 +92,7 @@
 		</array>
 	</edit-config>
 	
+	<plugin spec="https://github.com/cjpearson/cordova-plugin-keyboard.git" source="git" />
 	<plugin spec="https://github.com/fiscal-cliff/phonegap-plugin-brightness.git" source="git" />
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner.git" source="git" />
     <edit-config file="*-Info.plist" mode="overwrite" platform="ios" target="NSCameraUsageDescription">
